@@ -33,7 +33,7 @@
                     android:id="@+id/aqi_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
                     android:textSize="40sp"/>
 
