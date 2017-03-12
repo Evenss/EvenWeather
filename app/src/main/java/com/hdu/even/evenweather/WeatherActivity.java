@@ -53,6 +53,8 @@ public class WeatherActivity extends AppCompatActivity {
     private Button navButton;
 
     public SwipeRefreshLayout swipeRefresh;
+
+    private String mWeatherId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,22 +92,21 @@ public class WeatherActivity extends AppCompatActivity {
         }else{
             loadBingPic();
         }
-        final String weatherId;
         if(weatherString != null){
             //存在本地缓存
             Weather weather = Utillity.handleWeatherResponse(weatherString);
-            weatherId = weather.basic.weatherId;
+            mWeatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
         }else{
             //本地无缓存，去服务器查询
-            weatherId = getIntent().getStringExtra("weather_id");
+            mWeatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.VISIBLE);
-            requestWeather(weatherId);
+            requestWeather(mWeatherId);
         }
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
             public void onRefresh() {
-                requestWeather(weatherId);
+                requestWeather(mWeatherId);
             }
         });
     }
@@ -229,6 +230,7 @@ public class WeatherActivity extends AppCompatActivity {
                                     .getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather",responseText);
                             editor.apply();
+                            mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
                         }else{
                             Toast.makeText(WeatherActivity.this,
