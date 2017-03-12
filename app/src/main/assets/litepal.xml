@@ -1,0 +1,11 @@
+<litepal>
+    <dbname value="even_weather"/>
+
+    <version value="1"/>
+
+    <list>
+        <mapping class="com.hdu.even.evenweather.db.City"/>
+        <mapping class="com.hdu.even.evenweather.db.County"/>
+        <mapping class="com.hdu.even.evenweather.db.Province"/>
+    </list>
+</litepal>
