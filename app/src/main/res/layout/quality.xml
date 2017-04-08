@@ -30,45 +30,63 @@
                 android:layout_centerInParent="true">
 
                 <TextView
-                    android:id="@+id/aqi_text"
+                    android:id="@+id/quality_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
                     android:textSize="40sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/aqi_index"
-                    android:textColor="@color/colorWhite"/>
             </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pm25_index"
+                        android:textColor="@color/colorWhite"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:id="@+id/pm25_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="18sp"/>
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/pm25_text"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="40sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/pm25_index"
-                    android:textColor="@color/colorWhite"/>
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="城市排名"
+                        android:textColor="@color/colorWhite"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:id="@+id/cityrank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

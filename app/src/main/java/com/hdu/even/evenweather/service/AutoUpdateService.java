@@ -21,8 +21,7 @@ import okhttp3.Response;
 
 public class AutoUpdateService extends Service {
     private static final int TIME = 60 * 60 * 1000;
-    private static final String URL = "http://guolin.tech/api/weather?cityId=";
-    private static final String KEY = "&key=aba0fc977a56484cbc908a56d537604c";
+    private static final String URL = "http://aider.meizu.com/app/weather/listWeather?cityIds=";
     private static final String BINGPIC_URL = "http://guolin.tech/api/bing_pic";
 
     @Override
@@ -58,8 +57,8 @@ public class AutoUpdateService extends Service {
         String weatherString = prefs.getString("weather",null);
         if(weatherString != null){
             Weather weather = Utillity.handleWeatherResponse(weatherString);
-            String weatherId = weather.basic.weatherId;
-            String weatherUrl = URL + weatherId + KEY;
+            String weatherId = weather.weatherId.toString();
+            String weatherUrl = URL + weatherId;
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -70,7 +69,7 @@ public class AutoUpdateService extends Service {
                 public void onResponse(Call call, Response response) throws IOException {
                     String responseText = response.body().string();
                     Weather weather = Utillity.handleWeatherResponse(responseText);
-                    if(weather != null && "ok".equals(weather.status)){
+                    if(weather != null ){
                         SharedPreferences.Editor editor = PreferenceManager
                                 .getDefaultSharedPreferences(AutoUpdateService.this).edit();
                         editor.putString("weather",responseText);

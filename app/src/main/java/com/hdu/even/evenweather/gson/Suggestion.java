@@ -1,14 +1,12 @@
 package com.hdu.even.evenweather.gson;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Even on 2017/3/12.
  * 提示建议类
  */
 
 public class Suggestion {
-    @SerializedName("comf")
+/*    @SerializedName("comf")
     public Comfort comfort;
 
     @SerializedName("cw")
@@ -30,5 +28,9 @@ public class Suggestion {
     public class Sport{
         @SerializedName("txt")
         public String info;
-    }
+    }*/
+
+    public String name;
+
+    public String content;
 }

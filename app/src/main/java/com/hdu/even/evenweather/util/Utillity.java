@@ -70,7 +70,8 @@ public class Utillity {
                     County county = new County();
                     county.setCountyName(countyObject.getString("name"));
                     county.setCityId(cityId);
-                    county.setWeatherId(countyObject.getString("weather_id"));
+                    String[] weatherId = countyObject.getString("weather_id").split("CN");
+                    county.setWeatherId(weatherId[1]);
                     county.save();
                 }
                 return true;
@@ -87,8 +88,8 @@ public class Utillity {
     public static Weather handleWeatherResponse(String response){
         try {
             JSONObject jsonObject = new JSONObject(response);
-            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
-            String weatherContent = jsonArray.getJSONObject(0).toString();//获取当天的天气预报
+            JSONArray jsonArray = jsonObject.getJSONArray("value");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
             return new Gson().fromJson(weatherContent,Weather.class);
         }catch (JSONException e){
             e.printStackTrace();

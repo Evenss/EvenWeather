@@ -10,9 +10,9 @@ import java.util.List;
  */
 
 public class Weather {
-    public String status;
+/*    public String status;
 
-    public AQI aqi;
+    public AQI quality;
 
     public Basic basic;
 
@@ -21,5 +21,23 @@ public class Weather {
     public Suggestion suggestion;
 
     @SerializedName("daily_forecast")
-    public List<Forecast> forecastList;
+    public List<Forecast> forecastList;*/
+
+    @SerializedName("city")
+    public String cityName;
+
+    @SerializedName("cityid")
+    public Integer weatherId;
+
+    @SerializedName("indexes")
+    public List<Suggestion> suggestionList;
+
+    public PM25 pm25;
+
+    public RealTime realtime;
+
+    public WeatherDetailsInfo weatherDetailsInfo;
+
+    @SerializedName("weathers")
+    public List<Weathers> weatherList;
 }

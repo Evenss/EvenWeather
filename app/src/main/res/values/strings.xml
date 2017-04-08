@@ -10,7 +10,7 @@
     <!-- sqi.xml-->
     <string name="air_quality">空气质量</string>
     <string name="aqi_index">AQI 指数</string>
-    <string name="pm25_index">PM2.5 指数</string>
+    <string name="pm25_index">PM2.5</string>
     
     <!-- suggestion.xml -->
     <string name="life_suggestion">生活建议</string>
