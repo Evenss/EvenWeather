@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -80,7 +81,23 @@ public class TicketShowActivity extends AppCompatActivity {
                 requestTicket();
             }
         });
+
+        //list滑动到顶部，才可下拉刷新
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(firstVisibleItem == 0){
+                    swipeRefresh.setEnabled(true);
+                }else{
+                    swipeRefresh.setEnabled(false);
+                }
+            }
+        });
     }
+
 
     private void initView(){
         mShowDate = (TextView)findViewById(R.id.show_date);
@@ -172,7 +189,6 @@ public class TicketShowActivity extends AppCompatActivity {
         builder.setNegativeButton("取消",null);
         builder.show();
     }
-
     //填写邮箱Dialog
     private void createEmailDialog(final AlertDialog.Builder builderType){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -384,6 +400,7 @@ public class TicketShowActivity extends AppCompatActivity {
                 }
             }
             if(list.get(position).seats.二等座 != null){
+                viewHolder.price.setText("￥"+list.get(position).seats.二等座.price+"起");
                 if((count = list.get(position).seats.二等座.count)==0){
                     viewHolder.seatType3.setText("二等座:" + count + "(抢)");
                     viewHolder.seatType3.setTextColor(getColor(R.color.OrangeRed));
@@ -420,6 +437,7 @@ public class TicketShowActivity extends AppCompatActivity {
                 }
             }
             if(list.get(position).seats.硬座 != null){
+                viewHolder.price.setText("￥"+list.get(position).seats.硬座.price+"起");
                 if((count = list.get(position).seats.硬座.count)==0){
                     viewHolder.seatType3.setText("硬座:" + count + "(抢)");
                     viewHolder.seatType3.setTextColor(getColor(R.color.OrangeRed));
