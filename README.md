@@ -1,3 +1,3 @@
-# Android Applacation
+# Android Application
 
 some small trick :)
