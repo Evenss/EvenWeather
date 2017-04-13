@@ -26,7 +26,7 @@ import com.hdu.even.evenweather.gson.Weather;
 import com.hdu.even.evenweather.gson.Weathers;
 import com.hdu.even.evenweather.service.AutoUpdateService;
 import com.hdu.even.evenweather.util.HttpUtil;
-import com.hdu.even.evenweather.util.Utillity;
+import com.hdu.even.evenweather.util.Utility;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -113,7 +113,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
         if(weatherString != null){
             //存在本地缓存
-            Weather weather = Utillity.handleWeatherResponse(weatherString);
+            Weather weather = Utility.handleWeatherResponse(weatherString);
             mWeatherId = weather.weatherId.toString();
             showWeatherInfo(weather);
         }else{
@@ -251,7 +251,7 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
-                final Weather weather = Utillity.handleWeatherResponse(responseText);
+                final Weather weather = Utility.handleWeatherResponse(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

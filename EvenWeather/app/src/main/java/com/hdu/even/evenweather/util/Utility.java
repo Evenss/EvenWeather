@@ -17,7 +17,7 @@ import org.json.JSONObject;
  * 解析从服务器返回的数据
  */
 
-public class Utillity {
+public class Utility {
 
     //解析和处理服务器返回的省级信息
     public static boolean handleProvinceResponse(String response){

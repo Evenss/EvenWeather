@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
 
 import com.hdu.even.evenweather.gson.Weather;
 import com.hdu.even.evenweather.util.HttpUtil;
-import com.hdu.even.evenweather.util.Utillity;
+import com.hdu.even.evenweather.util.Utility;
 
 import java.io.IOException;
 
@@ -56,7 +56,7 @@ public class AutoUpdateService extends Service {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather",null);
         if(weatherString != null){
-            Weather weather = Utillity.handleWeatherResponse(weatherString);
+            Weather weather = Utility.handleWeatherResponse(weatherString);
             String weatherId = weather.weatherId.toString();
             String weatherUrl = URL + weatherId;
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
@@ -68,7 +68,7 @@ public class AutoUpdateService extends Service {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String responseText = response.body().string();
-                    Weather weather = Utillity.handleWeatherResponse(responseText);
+                    Weather weather = Utility.handleWeatherResponse(responseText);
                     if(weather != null ){
                         SharedPreferences.Editor editor = PreferenceManager
                                 .getDefaultSharedPreferences(AutoUpdateService.this).edit();

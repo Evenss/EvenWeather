@@ -18,7 +18,7 @@ import com.hdu.even.evenweather.db.City;
 import com.hdu.even.evenweather.db.County;
 import com.hdu.even.evenweather.db.Province;
 import com.hdu.even.evenweather.util.HttpUtil;
-import com.hdu.even.evenweather.util.Utillity;
+import com.hdu.even.evenweather.util.Utility;
 
 import org.litepal.crud.DataSupport;
 
@@ -206,11 +206,11 @@ public class ChooseAreaFragment extends Fragment {
                 String responseText = response.body().string();
                 boolean result = false;
                 if("province".equals(type)){
-                    result = Utillity.handleProvinceResponse(responseText);
+                    result = Utility.handleProvinceResponse(responseText);
                 }else if("city".equals(type)){
-                    result = Utillity.handleCityResponse(responseText,selectedProvince.getId());
+                    result = Utility.handleCityResponse(responseText,selectedProvince.getId());
                 }else if("county".equals(type)){
-                    result = Utillity.handleCountyResponse(responseText,selectedCity.getId());
+                    result = Utility.handleCountyResponse(responseText,selectedCity.getId());
                 }
                 if(result){
                     getActivity().runOnUiThread(new Runnable() {
