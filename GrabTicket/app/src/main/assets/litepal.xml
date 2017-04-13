@@ -1,0 +1,9 @@
+<litepal>
+    <dbname value="grab_ticket"/>
+
+    <version value="1"/>
+
+    <list>
+        <mapping class="com.hdu.even.grabticket.db.UserInfo"/>
+    </list>
+</litepal>
