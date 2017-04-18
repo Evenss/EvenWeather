@@ -3,6 +3,7 @@ package com.hdu.even.grabticket;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hdu.even.grabticket.db.SocketInfo;
 import com.hdu.even.grabticket.db.UserInfo;
 import com.hdu.even.grabticket.gson.TicketInfo;
 import com.hdu.even.grabticket.gson.TicketList;
@@ -173,7 +175,11 @@ public class TicketShowActivity extends AppCompatActivity {
                 if(isChecked){
                     typesSubmit.add(types.get(which));
                 }else{
-                    typesSubmit.remove(which);
+                    for(int i=0;i<typesSubmit.size();i++){
+                        if(typesSubmit.get(i).equals(types.get(which))){
+                            typesSubmit.remove(i);
+                        }
+                    }
                 }
             }
         });
@@ -182,7 +188,6 @@ public class TicketShowActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                //typesSubmit.toString();
                 createEmailDialog(builder);
             }
         });
@@ -242,8 +247,31 @@ public class TicketShowActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("我们会将信息第一时间发送到您的邮箱，感谢支持！");
-        builder.setPositiveButton("好的，我会耐心等待", null);
+        builder.setPositiveButton("好的，我会耐心等待", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                socketConnection();
+            }
+        });
         builder.show();
+    }
+    //传数据到SocketActivity
+    private void socketConnection(){
+        ArrayList<String> trainNos = new ArrayList<>();
+        for(TicketList ticketInfo:listSubmit){
+            trainNos.add(ticketInfo.trainNo);
+        }
+        SocketInfo socketInfo = new SocketInfo();
+        socketInfo.trainNos = trainNos;
+        socketInfo.date = mUserInfo.getDate();
+        socketInfo.start = mUserInfo.getStart();
+        socketInfo.end = mUserInfo.getEnd();
+        socketInfo.email = mUserInfo.getEmail();
+        socketInfo.seats = typesSubmit;
+        Intent intent = new Intent(this,SocketActivity.class);
+        intent.putExtra("socketInfo",socketInfo);
+        startActivity(intent);
+        finish();
     }
     //动态展示车型
     private boolean checkGDType(){

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hdu.even.grabticket">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <meta-data android:name="com.amap.api.v2.apikey"
         android:value="545006399d1eb68005e98c56f466e4b6"/>
@@ -29,6 +30,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
         <activity android:name=".TicketShowActivity"/>
+        <activity android:name=".SocketActivity"/>
     </application>
 
 </manifest>
