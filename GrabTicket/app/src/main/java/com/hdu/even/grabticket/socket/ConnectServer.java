@@ -8,13 +8,14 @@ import java.net.Socket;
 
 /**
  * Created by Even on 2017/4/17.
+ * 发送信息给服务器的实体类
  */
 
-public class MySendInfo {
+public class ConnectServer {
     private int ip;
     private String host;
     private final static String END = "#end#";//用来结束发送的字符串
-    public MySendInfo(String host,int ip){
+    public ConnectServer(String host, int ip){
         this.ip = ip;
         this.host = host;
     }

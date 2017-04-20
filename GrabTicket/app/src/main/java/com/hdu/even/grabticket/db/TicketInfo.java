@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * 用于活动之间传递对象
  */
 
-public class SocketInfo implements Parcelable {
+public class TicketInfo implements Parcelable {
     public ArrayList<String> trainNos = new ArrayList<>();
     public String date;
     public String start;
@@ -31,22 +31,22 @@ public class SocketInfo implements Parcelable {
         dest.writeString(email);
         dest.writeList(seats);
     }
-    public static final Parcelable.Creator<SocketInfo> CREATOR = new Parcelable.Creator<SocketInfo>(){
+    public static final Parcelable.Creator<TicketInfo> CREATOR = new Parcelable.Creator<TicketInfo>(){
         @Override
-        public SocketInfo createFromParcel(Parcel source) {
-            SocketInfo socketInfo = new SocketInfo();
-            source.readList(socketInfo.trainNos,getClass().getClassLoader());
-            socketInfo.date = source.readString();
-            socketInfo.start = source.readString();
-            socketInfo.end = source.readString();
-            socketInfo.email = source.readString();
-            source.readList(socketInfo.seats,getClass().getClassLoader());
-            return socketInfo;
+        public TicketInfo createFromParcel(Parcel source) {
+            TicketInfo ticketInfo = new TicketInfo();
+            source.readList(ticketInfo.trainNos,getClass().getClassLoader());
+            ticketInfo.date = source.readString();
+            ticketInfo.start = source.readString();
+            ticketInfo.end = source.readString();
+            ticketInfo.email = source.readString();
+            source.readList(ticketInfo.seats,getClass().getClassLoader());
+            return ticketInfo;
         }
 
         @Override
-        public SocketInfo[] newArray(int size) {
-            return new SocketInfo[size];
+        public TicketInfo[] newArray(int size) {
+            return new TicketInfo[size];
         }
     };
 }

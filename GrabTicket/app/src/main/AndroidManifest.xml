@@ -30,7 +30,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
         <activity android:name=".TicketShowActivity"/>
-        <activity android:name=".SocketActivity"/>
+        <activity android:name=".PushInfoActivity"/>
     </application>
 
 </manifest>

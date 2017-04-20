@@ -21,9 +21,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hdu.even.grabticket.db.SocketInfo;
+import com.hdu.even.grabticket.db.TicketInfo;
 import com.hdu.even.grabticket.db.UserInfo;
-import com.hdu.even.grabticket.gson.TicketInfo;
 import com.hdu.even.grabticket.gson.TicketList;
 import com.hdu.even.grabticket.util.HttpUtil;
 import com.hdu.even.grabticket.util.Utility;
@@ -124,7 +123,7 @@ public class TicketShowActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
-                final TicketInfo ticketInfo = Utility.handleTicketInfoResponse(responseText);
+                final com.hdu.even.grabticket.gson.TicketInfo ticketInfo = Utility.handleTicketInfoResponse(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -261,15 +260,15 @@ public class TicketShowActivity extends AppCompatActivity {
         for(TicketList ticketInfo:listSubmit){
             trainNos.add(ticketInfo.trainNo);
         }
-        SocketInfo socketInfo = new SocketInfo();
-        socketInfo.trainNos = trainNos;
-        socketInfo.date = mUserInfo.getDate();
-        socketInfo.start = mUserInfo.getStart();
-        socketInfo.end = mUserInfo.getEnd();
-        socketInfo.email = mUserInfo.getEmail();
-        socketInfo.seats = typesSubmit;
-        Intent intent = new Intent(this,SocketActivity.class);
-        intent.putExtra("socketInfo",socketInfo);
+        TicketInfo ticketInfo = new TicketInfo();
+        ticketInfo.trainNos = trainNos;
+        ticketInfo.date = mUserInfo.getDate();
+        ticketInfo.start = mUserInfo.getStart();
+        ticketInfo.end = mUserInfo.getEnd();
+        ticketInfo.email = mUserInfo.getEmail();
+        ticketInfo.seats = typesSubmit;
+        Intent intent = new Intent(this,PushInfoActivity.class);
+        intent.putExtra("ticketInfo", ticketInfo);
         startActivity(intent);
         finish();
     }

@@ -229,7 +229,7 @@ public class GrabTicketActivity extends AppCompatActivity
         userInfo.save();
 
         Intent intent = new Intent(this,TicketShowActivity.class);
-        //Intent intent = new Intent(this,SocketActivity.class);
+        //Intent intent = new Intent(this,PushInfoActivity.class);
         intent.putExtra("userId",userInfo.getId());
         startActivity(intent);
     }
