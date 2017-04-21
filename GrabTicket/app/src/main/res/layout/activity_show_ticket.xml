@@ -4,13 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGrey">
+    android:background="@color/GhostWhite">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/CornflowerBlue">
         <TextView
             android:id="@+id/show_date"
             android:layout_width="wrap_content"
@@ -24,17 +24,15 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp">
+        android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ListView
-                android:id="@+id/list_view"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@color/colorGrey"
-                android:dividerHeight="10dp"/>
+                android:divider="@color/GhostWhite"/>
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -43,11 +41,13 @@
                     android:id="@+id/submit"
                     android:src="@drawable/icon_submit"
                     android:onClick="Submit"
-                    app:backgroundTint="#30469b"
+                    app:backgroundTint="@color/CornflowerBlue"
                     app:borderWidth="0dp"
                     app:elevation="2dp"
                     app:fabSize="normal"
                     app:pressedTranslationZ="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"

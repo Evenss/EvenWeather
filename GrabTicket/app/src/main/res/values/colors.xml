@@ -10,4 +10,8 @@
     <color name="black">#000000</color>
     <color name="OrangeRed">#FF4500</color>
     <color name="darkGray">#808080</color>
+    <color name="LightSkyBlue">#87CEFA</color>
+    <color name="SkyBlue">#87CEEB</color>
+    <color name="CornflowerBlue">#6495ED</color>
+    <color name="GhostWhite">#F8F8FF</color>
 </resources>

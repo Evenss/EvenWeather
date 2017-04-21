@@ -1,7 +1,6 @@
 package com.hdu.even.grabticket;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,15 +8,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AbsListView;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +36,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.hdu.even.grabticket.R.id.selected;
 import static com.hdu.even.grabticket.util.EmailUtil.isValidEmail;
 
 /**
@@ -57,7 +54,7 @@ public class TicketShowActivity extends AppCompatActivity {
     private static final String URL_TYPE ="&type=normal&user=neibu&source=site&start=1&num=500&sort=3";
 
     private static final int NO_SELECT_STATE = -1;
-    private ListView mListView;
+    private RecyclerView mRecyclerView;
     private List<TicketList> listSubmit = new ArrayList<>();// 需要提交的数据
     private ArrayList<String> typesSubmit = new ArrayList<>();//需要提交的座位类型
     private boolean isMultiSelect = false;// 是否处于多选状态
@@ -82,27 +79,13 @@ public class TicketShowActivity extends AppCompatActivity {
                 requestTicket();
             }
         });
-
-        //list滑动到顶部，才可下拉刷新
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem == 0){
-                    swipeRefresh.setEnabled(true);
-                }else{
-                    swipeRefresh.setEnabled(false);
-                }
-            }
-        });
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
     private void initView(){
         mShowDate = (TextView)findViewById(R.id.show_date);
-        mListView = (ListView)findViewById(R.id.list_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
         mSubmit = (FloatingActionButton)findViewById(R.id.submit);
     }
@@ -128,9 +111,8 @@ public class TicketShowActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(ticketInfo != null){
-                            adapter = new TicketAdapter(TicketShowActivity.this,
-                                    ticketInfo.ticketLists,NO_SELECT_STATE);
-                            mListView.setAdapter(adapter);
+                            adapter = new TicketAdapter(ticketInfo.ticketLists,NO_SELECT_STATE);
+                            mRecyclerView.setAdapter(adapter);
                         }else{
                             Toast.makeText(TicketShowActivity.this,
                                     "获取车票信息失败",Toast.LENGTH_SHORT).show();
@@ -254,7 +236,7 @@ public class TicketShowActivity extends AppCompatActivity {
         });
         builder.show();
     }
-    //传数据到SocketActivity
+    //传数据到PushInfoActivity
     private void socketConnection(){
         ArrayList<String> trainNos = new ArrayList<>();
         for(TicketList ticketInfo:listSubmit){
@@ -292,15 +274,12 @@ public class TicketShowActivity extends AppCompatActivity {
         return false;
     }
 
-    private class TicketAdapter extends BaseAdapter {
+    class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.MyViewHolder>{
         private List<TicketList> list;
-        private LayoutInflater inflater;
-
         private HashMap<Integer, Integer> isCheckBoxVisible = new HashMap<>();// 用来记录是否显示checkBox
         private HashMap<Integer, Boolean> isChecked = new HashMap<>();// 用来记录是否被选中
 
-        public TicketAdapter(Context context, List<TicketList> list,int position) {
-            inflater = LayoutInflater.from(context);
+        public TicketAdapter(List<TicketList> list, int position) {
             this.list = list;
             // 如果处于多选状态，则显示CheckBox，否则不显示
             if (isMultiSelect) {
@@ -322,91 +301,53 @@ public class TicketShowActivity extends AppCompatActivity {
                 isChecked.put(position, true);
             }
         }
-
+        //创建新View，被LayoutManager所调用
         @Override
-        public int getCount() {
-            return list.size();
-        }
-        @Override
-        public Object getItem(int position) {
-            return list.get(position);
-        }
-        @Override
-        public long getItemId(int position) {
-            return position;
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recyclerview_ticket,parent,false);
+            final MyViewHolder holder = new MyViewHolder(view);
+            return holder;
         }
 
+
+        //将数据与界面进行绑定的操作
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            final ViewHolder viewHolder;
-            if (convertView == null) {
-                viewHolder = new ViewHolder();
-                convertView = inflater.inflate(R.layout.listview_ticket, null);
-                initView(viewHolder,convertView);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-            setValue(viewHolder,position);
+        public void onBindViewHolder(final MyViewHolder holder,int position) {
+            setValue(holder,position);
             // 根据position设置CheckBox是否可见，是否选中
-            viewHolder.selected.setChecked(isChecked.get(position));
-
+            holder.selected.setChecked(isChecked.get(position));
             int flag = View.INVISIBLE;
             if(View.VISIBLE == isCheckBoxVisible.get(position)){
                 flag = View.VISIBLE;
             }else if(View.INVISIBLE == isCheckBoxVisible.get(position)){
                 flag = View.INVISIBLE;
             }
-            viewHolder.selected.setVisibility(flag);
-            // ListView每一个Item的长按事件
-            convertView.setOnLongClickListener(new onMyLongClick(position, list));
-            /*
-             * 在ListView中点击每一项的处理
-             * 如果CheckBox未选中，则点击后选中CheckBox，并将数据添加到list_delete中
-             * 如果CheckBox选中，则点击后取消选中CheckBox，并将数据从list_delete中移除
-             */
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 处于多选模式
-                    if (isMultiSelect) {
-                        if (viewHolder.selected.isChecked()) {
-                            viewHolder.selected.setChecked(false);
-                            listSubmit.remove(list.get(position));
-                        } else {
-                            viewHolder.selected.setChecked(true);
-                            listSubmit.add(list.get(position));
-                        }
-                    }else {
-                        Snackbar.make(v,"长按选择多个",Snackbar.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            return convertView;
-        }
-        private void initView(ViewHolder viewHolder,View convertView){
-            viewHolder.start = (TextView) convertView.findViewById(R.id.start);
-            viewHolder.startDate = (TextView) convertView.findViewById(R.id.start_date);
-            viewHolder.end = (TextView) convertView.findViewById(R.id.end);
-            viewHolder.endDate = (TextView) convertView.findViewById(R.id.end_date);
-            viewHolder.trainNum = (TextView) convertView.findViewById(R.id.train_num);
-            viewHolder.interval = (TextView) convertView.findViewById(R.id.interval);
-            viewHolder.price = (TextView) convertView.findViewById(R.id.price);
-            viewHolder.selected = (CheckBox) convertView.findViewById(selected);
+            holder.selected.setVisibility(flag);
 
-            viewHolder.seatType1 = (TextView) convertView.findViewById(R.id.seat_type1);
-            viewHolder.seatType2 = (TextView) convertView.findViewById(R.id.seat_type2);
-            viewHolder.seatType3 = (TextView) convertView.findViewById(R.id.seat_type3);
-            viewHolder.seatType4 = (TextView) convertView.findViewById(R.id.seat_type4);
+        }
+        //获取数据的数量
+        @Override
+        public int getItemCount() {
+            return list.size();
         }
 
-        private void setValue(ViewHolder viewHolder,int position){
+        private void setValue(final MyViewHolder viewHolder, int position){
             viewHolder.start.setText(list.get(position).dptStationName);
             viewHolder.startDate.setText(list.get(position).dptTime);
             viewHolder.end.setText(list.get(position).arrStationName);
             viewHolder.endDate.setText(list.get(position).arrTime);
             viewHolder.trainNum.setText(list.get(position).trainNo);
             viewHolder.interval.setText(list.get(position).extraTicketInfo.interval);
+            viewHolder.seatType1.setText("");//强制刷新剩余票数
+            viewHolder.seatType2.setText("");
+            viewHolder.seatType3.setText("");
+            viewHolder.seatType4.setText("");
+            if (isMultiSelect && isChecked.get(position).equals(true)) {
+                viewHolder.selected.setChecked(true);
+            }else{
+                viewHolder.selected.setChecked(false);
+            }
             int count;
             if(list.get(position).seats.商务座 != null){
                 if((count = list.get(position).seats.商务座.count)==0){
@@ -427,7 +368,7 @@ public class TicketShowActivity extends AppCompatActivity {
                 }
             }
             if(list.get(position).seats.二等座 != null){
-                viewHolder.price.setText("￥"+list.get(position).seats.二等座.price+"起");
+                viewHolder.price.setText("￥"+list.get(position).seats.二等座.price);
                 if((count = list.get(position).seats.二等座.count)==0){
                     viewHolder.seatType3.setText("二等座:" + count + "(抢)");
                     viewHolder.seatType3.setTextColor(getColor(R.color.OrangeRed));
@@ -464,7 +405,7 @@ public class TicketShowActivity extends AppCompatActivity {
                 }
             }
             if(list.get(position).seats.硬座 != null){
-                viewHolder.price.setText("￥"+list.get(position).seats.硬座.price+"起");
+                viewHolder.price.setText("￥"+list.get(position).seats.硬座.price);
                 if((count = list.get(position).seats.硬座.count)==0){
                     viewHolder.seatType3.setText("硬座:" + count + "(抢)");
                     viewHolder.seatType3.setTextColor(getColor(R.color.OrangeRed));
@@ -475,42 +416,61 @@ public class TicketShowActivity extends AppCompatActivity {
             }
         }
 
-        class ViewHolder {
-            public TextView start;
-            public TextView startDate;
-            public TextView end;
-            public TextView endDate;
-            public TextView trainNum;
-            public TextView interval;
-            public TextView price;
-            public CheckBox selected;
+        //自定义的ViewHolder，持有每个Item的的所有界面元素
+        class MyViewHolder extends RecyclerView.ViewHolder
+                implements View.OnClickListener,View.OnLongClickListener{
+            private TextView start;
+            private TextView startDate;
+            private TextView end;
+            private TextView endDate;
+            private TextView trainNum;
+            private TextView interval;
+            private TextView price;
+            private CheckBox selected;
 
-            public TextView seatType1;
-            public TextView seatType2;
-            public TextView seatType3;
-            public TextView seatType4;
-        }
+            private TextView seatType1;
+            private TextView seatType2;
+            private TextView seatType3;
+            private TextView seatType4;
 
-        // 自定义长按事件
-        class onMyLongClick implements View.OnLongClickListener {
-
-            private int position;
-            private List<TicketList> list;
-
-            // 获取数据，与长按Item的position
-            public onMyLongClick(int position, List<TicketList> list) {
-                this.position = position;
-                this.list = list;
+            public MyViewHolder(final View view) {
+                super(view);
+                initView(view);
+                view.setOnClickListener(this);
+                // ListView每一个Item的长按事件
+                view.setOnLongClickListener(this);
             }
-
-            // 在长按监听时候，切记将监听事件返回true
+            /*
+             * 在ListView中点击每一项的处理
+             * 如果CheckBox未选中，则点击后选中CheckBox，并将数据添加到list_delete中
+             * 如果CheckBox选中，则点击后取消选中CheckBox，并将数据从list_delete中移除
+             */
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View view) {
+                // 处于多选模式
+                if (isMultiSelect) {
+                    if (selected.isChecked()) {
+                        selected.setChecked(false);
+                        isChecked.put(getLayoutPosition(),false);
+                        listSubmit.remove(list.get(getLayoutPosition()));
+                    } else {
+                        selected.setChecked(true);
+                        isChecked.put(getLayoutPosition(),true);
+                        listSubmit.add(list.get(getLayoutPosition()));
+                    }
+                }else {
+                    Snackbar.make(view,"长按选择多个",Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            //长按事件
+            @Override
+            public boolean onLongClick(View view) {
+                int position = getLayoutPosition();
                 if(isMultiSelect == true){//选中状态下长按，取消
                     isMultiSelect = false;
                     listSubmit.clear();
-                    adapter = new TicketAdapter(TicketShowActivity.this,list, NO_SELECT_STATE);
-                    mListView.setAdapter(adapter);
+                    adapter = new TicketAdapter(list, NO_SELECT_STATE);
+                    mRecyclerView.setAdapter(adapter);
                     return true;
                 }
                 isMultiSelect = true;
@@ -521,9 +481,25 @@ public class TicketShowActivity extends AppCompatActivity {
                     adapter.isCheckBoxVisible.put(i, CheckBox.VISIBLE);
                 }
                 // 根据position，设置ListView中对应的CheckBox为选中状态
-                adapter = new TicketAdapter(TicketShowActivity.this,list, position);
-                mListView.setAdapter(adapter);
+                adapter = new TicketAdapter(list, position);
+                mRecyclerView.setAdapter(adapter);
                 return true;
+            }
+
+            public void initView(View convertView){
+                start = (TextView) convertView.findViewById(R.id.start);
+                startDate = (TextView) convertView.findViewById(R.id.start_date);
+                end = (TextView) convertView.findViewById(R.id.end);
+                endDate = (TextView) convertView.findViewById(R.id.end_date);
+                trainNum = (TextView) convertView.findViewById(R.id.train_num);
+                interval = (TextView) convertView.findViewById(R.id.interval);
+                price = (TextView) convertView.findViewById(R.id.price);
+                selected = (CheckBox) convertView.findViewById(R.id.selected);
+
+                seatType1 = (TextView) convertView.findViewById(R.id.seat_type1);
+                seatType2 = (TextView) convertView.findViewById(R.id.seat_type2);
+                seatType3 = (TextView) convertView.findViewById(R.id.seat_type3);
+                seatType4 = (TextView) convertView.findViewById(R.id.seat_type4);
             }
         }
     }
