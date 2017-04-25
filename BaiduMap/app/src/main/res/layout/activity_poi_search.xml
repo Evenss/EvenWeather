@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/poi_departure_city"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="城市"/>
+        <AutoCompleteTextView
+            android:id="@+id/poi_departure_address"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="详细地址"/>
+        <Button
+            android:id="@+id/poi_departure_search"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="搜索"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/poi_destination_city"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="城市" />
+        <AutoCompleteTextView
+            android:id="@+id/poi_destination_address"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="详细地址" />
+        <Button
+            android:id="@+id/poi_destination_search"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="搜索"/>
+    </LinearLayout>
+
+
+    <fragment
+        android:id="@+id/poi_search_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.baidu.mapapi.map.SupportMapFragment" />
+
+
+</LinearLayout>
